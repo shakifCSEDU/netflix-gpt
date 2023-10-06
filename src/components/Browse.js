@@ -1,7 +1,7 @@
  const Browse = ()=>{
   return(
     <div>
-      Body
+      Browse
     </div>
   )
  }

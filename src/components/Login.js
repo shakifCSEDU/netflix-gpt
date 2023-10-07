@@ -3,14 +3,15 @@ import Header from "./Header";
 import { checkValidData } from "../utility/validity";
 import { createUserWithEmailAndPassword,signInWithEmailAndPassword, updateProfile  } from "firebase/auth";
 import { auth } from "./../utility/firebase";
-import {useNavigate } from "react-router-dom";
+
 import { useDispatch } from "react-redux";
 import {addUser} from "../utility/userSlice";
+import { USE_AVATAR } from "../utility/constants";
 
 const Login = () => {
   const [isSignInForm, setIsSignForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate();
+  
   const dispatch = useDispatch();
 
 
@@ -39,7 +40,7 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           updateProfile(user, {
-            displayName:name.current.value, photoURL: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+            displayName:name.current.value, photoURL:USE_AVATAR
           }).then(() => {
             const {uid,email,displayName,photoURL}  = auth.currentUser;
             dispatch(
@@ -50,7 +51,6 @@ const Login = () => {
                     photoURL:photoURL,
                 })
             );
-            navigate("/browse");
 
           }).catch((error) => {
             setErrorMessage(error.message);
@@ -72,8 +72,7 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-          navigate("/browse");
-          //console.log(user);
+          
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -105,7 +104,7 @@ const Login = () => {
             ref={name}
             type="text"
             placeholder="Full Name "
-            className="p-4 my-4 w-full bg-gray-700"
+            className="p-4 my-4 w-full bg-gray-700 rounded-md"
           />
         )}
 
@@ -113,17 +112,13 @@ const Login = () => {
           ref={email}
           type="text"
           placeholder="Email Address"
-          className="p-4 my-4 w-full bg-gray-700"
+          className="p-4 my-4 w-full bg-gray-700 rounded-md"
         />
-        
-
-
-
         <input
           ref={password}
           type="password"
           placeholder="Password"
-          className="p-4 my-4 w-full bg-gray-700"
+          className="p-4 my-4 w-full bg-gray-700 rounded-md"
         />
         <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
 

@@ -27,8 +27,8 @@ const Body = () => {
       if (user) {
         // user sign in
 
-        const { uid, email, displayName } = user;
-        dispatch(addUser({ uid: uid, email: email, displayName: displayName }));
+        const { uid, email, displayName ,photoURL} = user;
+        dispatch(addUser({ uid: uid, email: email, displayName: displayName,photoURL:photoURL }));
        
 
       } else {

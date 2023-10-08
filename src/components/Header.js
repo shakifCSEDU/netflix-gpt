@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { addUser, removeUser } from "../utility/userSlice";
-import { LOGO } from "../utility/constants";
+import { LOGO, SUPPORTED_LANGUAGES } from "../utility/constants";
+import { toggleGptSearchView } from "../utility/gptSlice";
+import { changeLanguage } from "../utility/configSlice";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -13,9 +15,7 @@ const Header = () => {
 
   const handleSignOut = () => {
     signOut(auth)
-      .then(() => {
-        
-      })
+      .then(() => {})
       .catch((error) => {
         navigate("/error");
       });
@@ -36,7 +36,6 @@ const Header = () => {
           })
         );
         navigate("/browse");
-
       } else {
         dispatch(removeUser());
         navigate("/");
@@ -44,19 +43,36 @@ const Header = () => {
     });
 
     // Unsubscribe when component unmounts
-    return ()=>unsubscribe();
-
+    return () => unsubscribe();
   }, []);
+
+  const handleGptSearchClick = () => {
+    dispatch(toggleGptSearchView());
+  };
+
+  const handleLanguageChange = (e)=>{
+    dispatch(changeLanguage(e.target.value));
+  }
 
   return (
     <div className="absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-screen flex justify-between">
-      <img
-        className="w-44"
-        src={LOGO}
-        alt="netflix-logo"
-      />
+      <img className="w-44" src={LOGO} alt="netflix-logo" />
       {user && (
         <div className="flex p-2">
+          <select className="p-2 bg-gray-900 text-white m-2 rounded-md" onChange={handleLanguageChange}>
+            {SUPPORTED_LANGUAGES.map((lang) => (
+              <option key={lang.identifier} value={lang.name}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={handleGptSearchClick}
+            className="py-2 px-4 my-2 bg-purple-800 text-white rounded-lg"
+          >
+            GPT Search
+          </button>
           <img className="w-12 h-12" alt="user-icon" src={user.photoURL} />
           <button onClick={handleSignOut} className="font-bold text-white">
             Sign Out

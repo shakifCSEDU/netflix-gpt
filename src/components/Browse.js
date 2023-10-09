@@ -5,6 +5,7 @@ import MainContainer from "./MainContainer";
 import SecondaryContainer from "./SecondaryContainer";
 import GptSearch from "./GptSearch";
 import { useSelector } from "react-redux";
+import GptMovieSuggestion from "./GptMovieSuggestion";
 
 const Browse = () => {
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
@@ -16,7 +17,10 @@ const Browse = () => {
     <div>
       <Header />
       {showGptSearch ? (
+        <>
         <GptSearch />
+        
+        </>
       ) : (
         <>
           <MainContainer />
